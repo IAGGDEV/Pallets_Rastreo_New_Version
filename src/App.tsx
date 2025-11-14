@@ -4,7 +4,7 @@ import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
 
 function App() {
-  const [trackingNumbers, setTrackingNumbers] = useState<string[]>([]);
+  const [_trackingNumbers, setTrackingNumbers] = useState<string[]>([]);
 
   const handleTrack = (numbers: string[]) => {
     setTrackingNumbers(numbers);
