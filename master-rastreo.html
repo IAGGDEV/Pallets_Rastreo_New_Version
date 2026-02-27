@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pallets Premium | Global Tracking Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pallets-yellow': '#F5B800',
+                        'pallets-black': '#0A0A0A',
+                        'pallets-gray': '#71717A',
+                        'pallets-accent': '#FFD700',
+                        'pallets-green': '#10B981',
+                    },
+                    boxShadow: {
+                        'hyper': '0 30px 60px -12px rgba(0, 0, 0, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3)',
+                        'yellow-shimmer': '0 0 40px rgba(245, 184, 0, 0.2)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --yellow: #F5B800;
+            --black: #0A0A0A;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--black);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .syncopate {
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .glass-dark {
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .yellow-gradient-text {
+            background: linear-gradient(135deg, #F5B800 0%, #FFD700 50%, #F5B800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .grid-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(245, 184, 0, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-shadow: 0 0 15px var(--yellow);
+            animation: scan 3s linear infinite;
+            z-index: 50;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        .progress-node.active {
+            box-shadow: 0 0 20px var(--yellow);
+            background-color: var(--yellow);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="grid-bg min-h-screen">
+    <!-- PRELOADER MOCKUP -->
+    <div id="preloader"
+        class="fixed inset-0 z-[100] bg-pallets-black flex items-center justify-center transition-opacity duration-700">
+        <div class="relative flex flex-col items-center">
+            <div class="w-24 h-24 border-t-4 border-pallets-yellow rounded-full animate-spin mb-6"></div>
+            <p class="syncopate text-xs tracking-[0.5em] text-pallets-yellow">INITIALIZING ELITE TRACKING</p>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-4 transition-all duration-300" id="navbar">
+        <div
+            class="max-w-7xl mx-auto flex items-center justify-between glass-dark rounded-full px-8 py-3 border border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-pallets-yellow rounded-lg flex items-center justify-center">
+                    <i data-lucide="box" class="text-black w-6 h-6"></i>
+                </div>
+                <span class="syncopate font-bold text-sm tracking-tighter">PALLETS <span
+                        class="text-pallets-yellow">PREMIUM</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
+                <a href="#" class="hover:text-pallets-yellow transition-colors">Servicios</a>
+                <a href="#" class="hover:text-pallets-yellow transition-colors">Cobertura</a>
+                <a href="#" class="hover:text-pallets-yellow transition-colors">Contacto</a>
+                <button
+                    class="bg-pallets-yellow text-black px-6 py-2 rounded-full hover:bg-white transition-all transform hover:scale-105 active:scale-95 leading-none shadow-yellow-shimmer">
+                    ÁREA CLIENTE
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-40 pb-20 px-6 overflow-hidden">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-pallets-yellow/5 rounded-full blur-[120px] pointer-events-none">
+        </div>
+
+        <div class="max-w-5xl mx-auto relative">
+            <div class="text-center space-y-8 mb-16">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] syncopate font-bold tracking-widest text-pallets-yellow animate-pulse">
+                    <span class="w-2 h-2 bg-pallets-yellow rounded-full"></span> SYSTEM ONLINE: NODE_LA_MX_01
+                </div>
+                <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none">
+                    LOGÍSTICA <br> <span class="yellow-gradient-text">SIN LÍMITES.</span>
+                </h1>
+                <p class="text-pallets-gray text-lg md:text-xl max-w-2xl mx-auto font-light">
+                    Control absoluto de tus envíos internacionales con tecnología de rastreo aeroespacial.
+                </p>
+            </div>
+
+            <!-- SEARCH ENGINE -->
+            <div class="max-w-3xl mx-auto group">
+                <div
+                    class="relative glass-dark p-2 rounded-[32px] border border-white/20 shadow-hyper transition-all group-hover:border-pallets-yellow/50 overflow-hidden">
+                    <div class="scan-line" id="search-scanner"></div>
+                    <div class="flex flex-col md:flex-row gap-2 relative z-10">
+                        <div class="flex-grow relative">
+                            <i data-lucide="shield-search"
+                                class="absolute left-6 top-1/2 -translate-y-1/2 text-pallets-yellow w-6 h-6"></i>
+                            <input type="text" id="tracking-input" placeholder="ID DE RASTREO (EJ: PP-80186)"
+                                class="w-full bg-transparent pl-16 pr-8 py-6 rounded-3xl text-xl font-bold placeholder:text-white/20 outline-none">
+                        </div>
+                        <button onclick="activateTracking()"
+                            class="bg-pallets-yellow text-black px-12 py-6 rounded-[24px] syncopate font-bold text-sm tracking-widest hover:bg-white hover:shadow-yellow-shimmer transition-all active:scale-95 flex items-center justify-center gap-3">
+                            TRACKER <i data-lucide="crosshair" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRACKING RESULTS VIEW (Dynamic) -->
+    <section id="tracking-results"
+        class="hidden px-6 pb-40 opacity-0 transform translate-y-10 transition-all duration-1000">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- MASTER STATUS CARD -->
+            <div class="lg:col-span-8 space-y-8">
+                <div class="glass-dark rounded-[40px] border border-white/10 overflow-hidden p-8 md:p-12 relative">
+                    <div class="absolute top-0 right-0 p-8 opacity-5">
+                        <i data-lucide="globe" class="w-64 h-64 text-white"></i>
+                    </div>
+
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16 relative z-10">
+                        <div class="space-y-2">
+                            <span class="text-pallets-yellow text-[10px] syncopate font-bold tracking-[0.3em]">SHIPMENT
+                                IDENTIFIED</span>
+                            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter">PP-8018688-USA</h2>
+                            <p class="text-pallets-gray flex items-center gap-2 italic">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-pallets-yellow"></i>
+                                En tránsito: Hub Guadalajara -> CDMX
+                            </p>
+                        </div>
+                        <div
+                            class="bg-pallets-yellow p-8 rounded-3xl text-black text-center min-w-[200px] shadow-yellow-shimmer transform -rotate-2">
+                            <p class="text-[10px] syncopate font-bold mb-1 opacity-60">ETA DELIVERY</p>
+                            <p class="text-4xl font-black italic tracking-tighter">NOV 24</p>
+                        </div>
+                    </div>
+
+                    <!-- MODERN PROGRESS PATH -->
+                    <div class="relative py-12">
+                        <div class="absolute top-1/2 left-0 w-full h-[2px] bg-white/5 -translate-y-1/2"></div>
+                        <div class="absolute top-1/2 left-0 h-[2px] bg-pallets-yellow -translate-y-1/2 shadow-yellow-shimmer transition-all duration-1000"
+                            id="progress-line" style="width: 75%"></div>
+
+                        <div class="flex justify-between relative">
+                            <!-- Node 1 -->
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="w-12 h-12 rounded-full border-2 border-pallets-yellow bg-pallets-yellow flex items-center justify-center text-black shadow-yellow-shimmer z-10">
+                                    <i data-lucide="package" class="w-6 h-6"></i>
+                                </div>
+                                <span class="mt-4 text-[10px] syncopate font-bold text-pallets-yellow">LA HUB</span>
+                            </div>
+                            <!-- Node 2 -->
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="w-12 h-12 rounded-full border-2 border-pallets-yellow bg-pallets-yellow flex items-center justify-center text-black shadow-yellow-shimmer z-10">
+                                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                                </div>
+                                <span class="mt-4 text-[10px] syncopate font-bold text-pallets-yellow">BORDER</span>
+                            </div>
+                            <!-- Node 3 -->
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="w-12 h-12 rounded-full border-4 border-pallets-yellow bg-black flex items-center justify-center text-pallets-yellow animate-pulse z-10">
+                                    <i data-lucide="truck" class="w-6 h-6"></i>
+                                </div>
+                                <span class="mt-4 text-[10px] syncopate font-bold text-white">TRANSIT</span>
+                            </div>
+                            <!-- Node 4 -->
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="w-12 h-12 rounded-full border-2 border-white/10 bg-black/50 flex items-center justify-center text-white/20 z-10">
+                                    <i data-lucide="home" class="w-6 h-6"></i>
+                                </div>
+                                <span class="mt-4 text-[10px] syncopate font-bold text-white/20">DFX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE TIMELINE -->
+                <div class="space-y-6">
+                    <h3 class="syncopate text-xs tracking-widest text-pallets-yellow flex items-center gap-3">
+                        <i data-lucide="list-tree"></i> SECUENCIA DE RASTREO
+                    </h3>
+                    <div class="space-y-4">
+                        <div
+                            class="glass-dark border-l-4 border-pallets-yellow p-6 rounded-2xl flex gap-6 items-start hover:bg-white/5 transition-colors group">
+                            <div
+                                class="w-12 h-12 bg-pallets-yellow/10 rounded-xl flex items-center justify-center text-pallets-yellow group-hover:bg-pallets-yellow group-hover:text-black transition-all">
+                                <i data-lucide="navigation"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-bold text-lg">ASIGNADO A REPARTO LOCAL</h4>
+                                    <span class="text-xs font-mono text-pallets-yellow">ACTUALMENTE</span>
+                                </div>
+                                <p class="text-pallets-gray text-sm">El paquete ha sido descargado en el centro
+                                    logístico regional y se ha asignado a la última milla.</p>
+                                <div
+                                    class="mt-4 flex gap-4 text-[10px] font-bold uppercase tracking-tighter opacity-50">
+                                    <span>📍 GDL - JALISCO</span>
+                                    <span>⏰ 13:05 PM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="glass-dark p-6 rounded-2xl flex gap-6 items-start opacity-50 grayscale hover:opacity-100 transition-all">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center">
+                                <i data-lucide="box-select"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-lg">PROCESADO EN ADUANA INTERNACIONAL</h4>
+                                <p class="text-pallets-gray text-sm">Validación de documentos exitosa. Liberación de
+                                    carga confirmada.</p>
+                                <div class="mt-4 flex gap-4 text-[10px] font-bold tracking-tighter opacity-50">
+                                    <span>📍 TIJUANA - BC</span>
+                                    <span>⏰ 08:45 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR DETAILS -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- SPECIFICATIONS -->
+                <div class="glass-dark rounded-[32px] p-8 border border-white/10">
+                    <h4 class="syncopate text-[10px] tracking-widest mb-8 text-pallets-gray">DIAGNÓSTICO CARGA</h4>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-end border-b border-white/5 pb-4">
+                            <div>
+                                <p class="text-[10px] text-pallets-gray uppercase font-bold">Masa Bruta</p>
+                                <p class="text-xl font-bold">128.4 kg</p>
+                            </div>
+                            <i data-lucide="scaling" class="text-pallets-yellow w-5 h-5 opacity-40"></i>
+                        </div>
+                        <div class="flex justify-between items-end border-b border-white/5 pb-4">
+                            <div>
+                                <p class="text-[10px] text-pallets-gray uppercase font-bold">Volumetría</p>
+                                <p class="text-xl font-bold">1.2m x 0.8m x 1.4m</p>
+                            </div>
+                            <i data-lucide="maximize-2" class="text-pallets-yellow w-5 h-5 opacity-40"></i>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-[10px] text-pallets-gray uppercase font-bold">Categoría</p>
+                                <p class="text-xl font-bold">Pallet Premium Elite</p>
+                            </div>
+                            <i data-lucide="crown" class="text-pallets-yellow w-5 h-5 opacity-40"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUPPORT HUB -->
+                <div class="bg-pallets-yellow rounded-[32px] p-8 text-black relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-125 transition-all rotate-12">
+                        <i data-lucide="headphones" class="w-32 h-32"></i>
+                    </div>
+                    <h3 class="syncopate text-xs tracking-widest mb-4">DIRECT SUPPORT</h3>
+                    <p class="font-bold mb-8 text-lg leading-tight uppercase italic underline decoration-2">¿Incidencias
+                        en el trayecto? Contacta a tu oficial logístico.</p>
+                    <a href="https://wa.me/1234567890"
+                        class="flex items-center justify-center gap-3 bg-black text-pallets-yellow py-5 rounded-2xl font-black syncopate text-xs tracking-[0.2em] transform hover:-translate-y-1 hover:shadow-2xl transition-all">
+                        WHATSAPP <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- DOWNLOAD REPORT -->
+                <div
+                    class="glass-dark rounded-[32px] p-6 flex items-center justify-between group cursor-pointer hover:border-pallets-yellow/30 transition-all">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="file-text" class="text-pallets-yellow"></i>
+                        <span class="text-xs font-bold uppercase tracking-widest">Reporte Fotográfico</span>
+                    </div>
+                    <i data-lucide="download" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER ELITE -->
+    <footer class="bg-black py-20 border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+            <div class="lg:col-span-2">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-8 h-8 bg-pallets-yellow rounded-lg flex items-center justify-center">
+                        <i data-lucide="box" class="text-black w-4 h-4"></i>
+                    </div>
+                    <span class="syncopate font-bold text-xs tracking-tighter text-white">PALLETS <span
+                            class="text-pallets-yellow">PREMIUM</span></span>
+                </div>
+                <p class="text-pallets-gray text-sm leading-relaxed max-w-sm mb-8 font-light italic">
+                    "Redefiniendo la frontera logística entre México y el mundo con precisión milimétrica y tecnología
+                    de punta."
+                </p>
+            </div>
+            <div>
+                <h5 class="syncopate text-[10px] tracking-[0.3em] mb-8 text-pallets-yellow">OPERATIONS</h5>
+                <ul class="space-y-4 text-xs font-bold uppercase tracking-widest text-white/40">
+                    <li><a href="#" class="hover:text-white transition-colors">Tiempos Entrega</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Normatividad</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Cotizador AI</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="syncopate text-[10px] tracking-[0.3em] mb-8 text-pallets-yellow">LEGAL</h5>
+                <p class="text-white/20 text-[10px] leading-relaxed">
+                    © 2026 PALLETS PREMIUM INTERNATIONAL. TODOS LOS DERECHOS RESERVADOS. LOGÍSTICA DE ÉLITE DESDE LOS
+                    ÁNGELES.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // INIT LUCIDE
+        lucide.createIcons();
+
+        // PRELOADER
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => document.getElementById('preloader').remove(), 700);
+            }, 1000);
+        });
+
+        // NAVBAR SCROLL
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/80', 'backdrop-blur-md', 'py-2');
+            } else {
+                nav.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-2');
+            }
+        });
+
+        // SEARCH TRIGGER
+        function activateTracking() {
+            const input = document.getElementById('tracking-input').value;
+            if (!input) {
+                gsap.to("#tracking-input", { x: [-10, 10, -10, 10, 0], duration: 0.4 });
+                return;
+            }
+
+            // SIMULATE DATA LOADING
+            const scanner = document.getElementById('search-scanner');
+            scanner.style.display = 'block';
+
+            gsap.to(window, { duration: 1, scrollTo: 200, ease: "power2.inOut" });
+
+            setTimeout(() => {
+                const results = document.getElementById('tracking-results');
+                results.classList.remove('hidden');
+                setTimeout(() => {
+                    results.style.opacity = '1';
+                    results.style.transform = 'translateY(0)';
+                    lucide.createIcons();
+                    // Scroll to results
+                    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pallets Premium - Sistema de Rastreo Maestro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pallets-yellow': '#F5B800',
+                        'pallets-black': '#1A1A1A',
+                        'pallets-gray': '#666666',
+                        'pallets-light': '#F5F5F5',
+                        'pallets-green': '#10B981',
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 50px rgba(0, 0, 0, 0.1)',
+                        'yellow-glow': '0 0 20px rgba(245, 184, 0, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hex-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 104V102H59V101H58V100H57V99H56V98H55V97H54V96H53V95H52V94H51V93H50V92H49V91H48V90H47V89H46V88H45V87H44V86H43V85H42V84H41V83H40V82H39V81H38V80H37V79H36V78H35V77H34V76H33V75H32V74H31V73H30V72H29V71H28V70H27V69H26V68H25V67H24V66H23V65H22V64H21V63H20V62H19V61H18V60H17V59H16V58H15V57H14V56H13V55H12V54H11V53H10V52H9V51H8V50H7V49H6V48H5V47H4V46H3V45H2V44H1V43H0V42h60v62zm-60-2v-2h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1V0h60v2H0z' fill='%23F5B800' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .step-inactive {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .pulse-yellow {
+            animation: pulse-yellow 2s infinite;
+        }
+
+        @keyframes pulse-yellow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 184, 0, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(245, 184, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 184, 0, 0);
+            }
+        }
+
+        .loader-ring {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+
+        .loader-ring:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #F5B800;
+            border-color: #F5B800 transparent #F5B800 transparent;
+            animation: loader-ring 1.2s linear infinite;
+        }
+
+        @keyframes loader-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAFAFA] text-pallets-black min-h-screen">
+    <!-- TOP NAV -->
+    <nav class="bg-pallets-yellow sticky top-0 z-50 shadow-md border-b-2 border-pallets-black/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 md:h-24">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="bg-white p-2 rounded-xl shadow-sm rotate-3 hover:rotate-0 transition-transform cursor-pointer">
+                        <img src="public/images/logo-pallets.png" alt="Pallets Premium" class="h-12 md:h-16 w-auto"
+                            onerror="this.src='/src/typescript.svg'; this.className='h-12 w-12'">
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-6">
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-pallets-black/60">Soporte
+                            24/7</span>
+                        <a href="tel:+1234567890"
+                            class="text-lg font-extrabold hover:text-white transition-colors flex items-center gap-2">
+                            <i data-lucide="phone" class="w-5 h-5"></i> +1 (234) 567-890
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="p-2"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-12 pb-24 overflow-hidden">
+        <div class="absolute inset-0 hex-pattern opacity-40 pointer-events-none"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-pallets-yellow/20 rounded-full blur-[100px]"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-pallets-yellow/10 rounded-full blur-[100px]"></div>
+
+        <div class="relative max-w-5xl mx-auto px-4 text-center">
+            <div
+                class="inline-flex items-center gap-2 bg-pallets-yellow/10 border border-pallets-yellow/20 px-4 py-2 rounded-full text-pallets-yellow font-bold text-sm mb-8 animate-bounce">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                NUEVO SISTEMA DE RASTREO V2
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+                Tus envíos, <span class="text-pallets-yellow drop-shadow-sm">sin fronteras.</span>
+            </h1>
+            <p class="text-xl text-pallets-gray mb-12 max-w-2xl mx-auto leading-relaxed">
+                Rastreo inteligente de Los Ángeles a México. Transparencia total en cada kilómetro de tu mercancía.
+            </p>
+
+            <!-- SEARCH BOX PREMIUM -->
+            <div class="max-w-3xl mx-auto">
+                <div class="glass p-3 md:p-4 rounded-[32px] shadow-premium relative">
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <div class="relative flex-grow">
+                            <div class="absolute left-6 top-1/2 -translate-y-1/2 text-pallets-yellow">
+                                <i data-lucide="package" class="w-6 h-6"></i>
+                            </div>
+                            <input type="text" id="tracking-input"
+                                placeholder="Ingresa tu número de guía (Ej: PP-12345)"
+                                class="w-full pl-16 pr-6 py-5 bg-white rounded-[24px] border-2 border-transparent focus:border-pallets-yellow outline-none text-lg font-medium transition-all shadow-inner">
+                        </div>
+                        <button onclick="simulateSearch()"
+                            class="bg-pallets-black hover:bg-pallets-yellow text-white hover:text-pallets-black px-10 py-5 rounded-[24px] font-extrabold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-3">
+                            <span>RASTREAR</span>
+                            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-pallets-gray font-medium">
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle-2"
+                            class="w-4 h-4 text-pallets-green"></i> Tiempo Real</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle-2"
+                            class="w-4 h-4 text-pallets-green"></i> Reporte Fotográfico</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle-2"
+                            class="w-4 h-4 text-pallets-green"></i> Notificaciones Push</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOADING STATE (Hidden by default) -->
+    <div id="loading-state" class="hidden fixed inset-0 z-[100] glass flex-col items-center justify-center">
+        <div class="loader-ring"></div>
+        <h3 class="mt-6 text-2xl font-bold">Conectando con el satélite...</h3>
+        <p class="text-pallets-gray">Localizando tu mercancía en tiempo real</p>
+    </div>
+
+    <!-- RESULTS SECTION (Hidden by default) -->
+    <section id="results-section" class="hidden relative pb-32">
+        <div class="max-w-6xl mx-auto px-4">
+            <!-- STATUS HEADER CARD -->
+            <div class="bg-white rounded-[40px] shadow-premium overflow-hidden border border-gray-100 mb-12">
+                <div class="bg-pallets-black p-8 md:p-12 text-white relative">
+                    <div class="absolute top-0 right-0 p-12 opacity-10 rotate-12">
+                        <i data-lucide="truck" class="w-48 h-48"></i>
+                    </div>
+                    <div
+                        class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                        <div>
+                            <div class="flex items-center gap-3 text-pallets-yellow mb-4">
+                                <span
+                                    class="bg-pallets-yellow/20 text-pallets-yellow px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">En
+                                    Tránsito</span>
+                                <span class="w-2 h-2 bg-pallets-yellow rounded-full animate-ping"></span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-black mb-2 tracking-tight">Guía: PP-8018688</h2>
+                            <p class="text-gray-400 font-medium">Servicio: Pallet Express Los Ángeles Premium</p>
+                        </div>
+                        <div
+                            class="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-right min-w-[240px]">
+                            <p class="text-xs uppercase font-bold text-gray-400 tracking-widest mb-1">Entrega Estimada
+                            </p>
+                            <p class="text-3xl font-black text-pallets-yellow">24 NOV</p>
+                            <p class="text-sm font-medium">Antes de las 18:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROGRESS TRACKER -->
+                <div class="p-8 md:p-16">
+                    <div class="relative">
+                        <!-- Line connections -->
+                        <div
+                            class="absolute top-1/2 left-0 w-full h-1.5 bg-gray-100 -translate-y-1/2 rounded-full overflow-hidden">
+                            <div
+                                class="h-full bg-pallets-yellow w-2/3 transition-all duration-1000 ease-out shadow-yellow-glow">
+                            </div>
+                        </div>
+
+                        <div class="relative flex justify-between">
+                            <!-- Step 1 -->
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="w-16 h-16 md:w-20 md:h-20 bg-pallets-yellow text-white rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 z-10">
+                                    <i data-lucide="package-check" class="w-8 h-8 md:w-10 md:h-10"></i>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs font-black text-pallets-yellow uppercase tracking-tighter">
+                                        Recibido</p>
+                                    <p class="text-sm font-bold text-gray-400">18 Nov, 09:00</p>
+                                </div>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="w-16 h-16 md:w-20 md:h-20 bg-pallets-yellow text-white rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 z-10">
+                                    <i data-lucide="ship" class="w-8 h-8 md:w-10 md:h-10"></i>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs font-black text-pallets-yellow uppercase tracking-tighter">
+                                        Frontera</p>
+                                    <p class="text-sm font-bold text-gray-400">19 Nov, 14:30</p>
+                                </div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="pulse-yellow w-16 h-16 md:w-20 md:h-20 bg-pallets-yellow text-white rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110 z-10">
+                                    <i data-lucide="truck" class="w-8 h-8 md:w-10 md:h-10"></i>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs font-black text-pallets-black uppercase tracking-tighter">En Ruta
+                                    </p>
+                                    <p class="text-sm font-bold text-pallets-black">Actualizado hoy</p>
+                                </div>
+                            </div>
+                            <!-- Step 4 -->
+                            <div class="flex flex-col items-center group step-inactive">
+                                <div
+                                    class="w-16 h-16 md:w-20 md:h-20 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center transform transition-transform group-hover:scale-110 z-10">
+                                    <i data-lucide="home" class="w-8 h-8 md:w-10 md:h-10"></i>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs font-black text-gray-400 uppercase tracking-tighter">Entregado</p>
+                                    <p class="text-sm font-bold text-gray-300">Pendiente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAILED LOG & INFO -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- HISTORY -->
+                <div class="lg:col-span-2 space-y-6">
+                    <h3 class="text-2xl font-black flex items-center gap-3">
+                        <i data-lucide="history" class="text-pallets-yellow"></i>
+                        Bitácora de Movimiento
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div
+                            class="bg-white p-6 rounded-3xl border border-pallets-yellow/30 shadow-sm border-l-8 border-l-pallets-yellow">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-black text-lg">En tránsito hacia destino final</h4>
+                                <span class="text-xs bg-gray-100 px-3 py-1 rounded-full font-bold">HOY 10:45 AM</span>
+                            </div>
+                            <p class="text-pallets-gray text-sm">El paquete ha salido del centro de distribución
+                                nacional y se dirige a la zona de entrega asignada en CDMX.</p>
+                            <div
+                                class="mt-4 pt-4 border-t border-gray-50 flex items-center gap-2 text-xs font-bold text-pallets-yellow">
+                                <i data-lucide="map-pin" class="w-4 h-4"></i> CENTRO DISTRIBUCIÓN VALLEJO
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm opacity-70">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-black text-lg">Entrada a Centro de Distribución</h4>
+                                <span class="text-xs bg-gray-100 px-3 py-1 rounded-full font-bold">20 NOV 18:20
+                                    PM</span>
+                            </div>
+                            <p class="text-pallets-gray text-sm">Clasificación automática completada. Listo para última
+                                milla.</p>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm opacity-70">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-black text-lg">Trámite de Aduana Completado</h4>
+                                <span class="text-xs bg-gray-100 px-3 py-1 rounded-full font-bold">19 NOV 14:30
+                                    PM</span>
+                            </div>
+                            <p class="text-pallets-gray text-sm">Libre de aduana. Ingreso a territorio nacional
+                                confirmado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXTRA CARD -->
+                <div class="space-y-6">
+                    <div
+                        class="bg-pallets-yellow p-8 rounded-[40px] text-pallets-black shadow-lg relative overflow-hidden group">
+                        <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-125 transition-transform">
+                            <i data-lucide="help-circle" class="w-32 h-32"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4">¿Necesitas Ayuda?</h3>
+                        <p class="font-bold mb-6 opacity-80">Reporta cualquier incidencia con tu guía o solicita cambio
+                            de domicilio.</p>
+                        <a href="https://wa.me/1234567890"
+                            class="block w-full bg-pallets-black text-white text-center py-4 rounded-2xl font-black hover:bg-gray-800 transition-colors shadow-lg">
+                            HABLAR CON UN AGENTE
+                        </a>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100">
+                        <h4 class="font-black mb-4 flex items-center gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-pallets-yellow"></i>
+                            Detalles del Envío
+                        </h4>
+                        <ul class="space-y-4 text-sm font-medium">
+                            <li class="flex justify-between py-2 border-b border-gray-50">
+                                <span class="text-gray-400">Peso Total:</span>
+                                <span>45.5 kg</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-50">
+                                <span class="text-gray-400">Dimensiones:</span>
+                                <span>120x80x100 cm</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-50">
+                                <span class="text-gray-400">Tipo:</span>
+                                <span>Pallet Industrial</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER PREMIUM -->
+    <footer class="bg-pallets-black text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 hex-pattern opacity-10 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <div class="bg-white p-2 rounded-xl inline-block mb-8">
+                        <img src="public/images/logo-pallets.png" alt="Pallets Premium" class="h-12 w-auto"
+                            onerror="this.src='/src/typescript.svg'; this.className='h-12 w-12'">
+                    </div>
+                    <p class="text-gray-400 text-lg max-w-sm mb-8 leading-relaxed">
+                        Líderes en logística binacional. Conectando negocios y familias con la mayor eficiencia del
+                        mercado.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#"
+                            class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-pallets-yellow hover:text-pallets-black transition-all"><i
+                                data-lucide="facebook"></i></a>
+                        <a href="#"
+                            class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-pallets-yellow hover:text-pallets-black transition-all"><i
+                                data-lucide="instagram"></i></a>
+                        <a href="#"
+                            class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-pallets-yellow hover:text-pallets-black transition-all"><i
+                                data-lucide="twitter"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-pallets-yellow font-black uppercase tracking-widest text-sm mb-8">Navegación</h4>
+                    <ul class="space-y-4 text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition-colors">Nosotros</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Servicios</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Cotizador</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-pallets-yellow font-black uppercase tracking-widest text-sm mb-8">Ubícanos</h4>
+                    <p class="text-gray-400 font-medium leading-relaxed">
+                        123 Logistic Way,<br>
+                        Los Ángeles, CA 90001<br>
+                        USA
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-gray-500 font-medium">© 2025 Pallets Premium. Diseñado con excelencia.</p>
+                <div class="flex gap-8 text-xs font-black uppercase tracking-widest text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Términos</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+                    <a href="#" class="hover:text-white transition-colors">Seguridad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+
+        function simulateSearch() {
+            const input = document.getElementById('tracking-input').value;
+            if (!input) return alert('Por favor ingresa un número de rastreo');
+
+            const loader = document.getElementById('loading-state');
+            const results = document.getElementById('results-section');
+
+            loader.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                results.classList.remove('hidden');
+                lucide.createIcons(); // Re-inicializar iconos en la nueva sección
+
+                // Animación suave al scroll a resultados
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
