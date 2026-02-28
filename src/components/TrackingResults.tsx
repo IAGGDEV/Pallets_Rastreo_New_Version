@@ -1,46 +1,25 @@
-import { useState } from 'react';
-import { Package, Truck, MapPin, Home, ChevronDown, ChevronUp, Clock } from 'lucide-react';
+import { Package, Truck, MapPin, Building, Navigation, Home } from 'lucide-react';
 import type { TrackingResponseFound } from '../types/tracking';
-import { STATUS_STEP_MAP, STEP_NAMES } from '../types/tracking';
+import { STEP_NAMES } from '../types/tracking';
 
 interface TrackingResultsProps {
   data: TrackingResponseFound;
 }
 
 const TrackingResults = ({ data }: TrackingResultsProps) => {
-  const [showHistory, setShowHistory] = useState(false);
+  // Determinar el paso actual basado en la nueva respuesta de Sheets (1-based para coincidir índice UI)
+  const currentStep = (data.step_index !== undefined && data.step_index >= 0) ? data.step_index + 1 : 1;
 
-  // Determinar el paso actual basado en status_master
-  const currentStep = STATUS_STEP_MAP[data.status_master];
 
-  // Formatear fecha en formato corto (DD/MM/YYYY)
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-MX', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(date);
-  };
 
-  // Formatear fecha y hora completa
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-MX', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
-  };
-
-  // Iconos para cada paso
+  // Iconos para cada paso (ahora son 6)
   const stepIcons = [
-    <Package className="w-8 h-8 md:w-10 md:h-10" />,
-    <Truck className="w-8 h-8 md:w-10 md:h-10" />,
-    <MapPin className="w-8 h-8 md:w-10 md:h-10" />,
-    <Home className="w-8 h-8 md:w-10 md:h-10" />
+    <Package className="w-5 h-5 md:w-7 md:h-7" />,       // Solicitado
+    <Truck className="w-5 h-5 md:w-7 md:h-7" />,         // En Camino
+    <Navigation className="w-5 h-5 md:w-7 md:h-7" />,    // A San Diego
+    <Building className="w-5 h-5 md:w-7 md:h-7" />,      // San Diego
+    <MapPin className="w-5 h-5 md:w-7 md:h-7" />,        // Cruzando
+    <Home className="w-5 h-5 md:w-7 md:h-7" />           // Tijuana
   ];
 
   return (
@@ -71,47 +50,31 @@ const TrackingResults = ({ data }: TrackingResultsProps) => {
                 <span className="font-bold text-pallets-black">{data.tracking_number}</span>
               </div>
 
-              {data.service_type && (
+              {data.current_status && (
                 <>
                   <span className="text-gray-300">|</span>
                   <div>
-                    <span className="text-pallets-gray">Servicio: </span>
-                    <span className="font-bold text-pallets-black">{data.service_type}</span>
+                    <span className="text-pallets-gray">Status actual: </span>
+                    <span className="font-bold text-pallets-black uppercase">{data.current_status}</span>
                   </div>
                 </>
               )}
 
-              {data.estimated_delivery && (
-                <>
-                  <span className="text-gray-300 hidden md:inline">|</span>
-                  <div>
-                    <span className="text-pallets-gray">Fecha programada de entrega: </span>
-                    <span className="font-bold text-pallets-black">{formatDate(data.estimated_delivery)}</span>
-                  </div>
-                </>
-              )}
             </div>
-
-            {data.receiver_name && (
-              <div className="mt-4">
-                <span className="text-pallets-gray">Recibió: </span>
-                <span className="font-bold text-pallets-black">{data.receiver_name}</span>
-              </div>
-            )}
           </div>
 
-          {/* Barra de Progreso con 4 Pasos */}
-          <div className="p-6 md:p-8 bg-gray-50">
-            <div className="relative">
+          {/* Barra de Progreso con 6 Pasos */}
+          <div className="p-4 md:p-8 bg-gray-50 border-b border-gray-200 overflow-x-auto">
+            <div className="relative min-w-[700px] md:min-w-0">
               {/* Línea de conexión */}
-              <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 hidden md:block" />
+              <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2" />
               <div
-                className="absolute top-1/2 left-0 h-1 bg-green-500 -translate-y-1/2 transition-all duration-500 hidden md:block"
-                style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+                className="absolute top-1/2 left-0 h-1 bg-green-500 -translate-y-1/2 transition-all duration-500"
+                style={{ width: `${((currentStep - 1) / 5) * 100}%` }}
               />
 
               {/* Pasos */}
-              <div className="relative grid grid-cols-4 gap-2 md:gap-4">
+              <div className="relative grid grid-cols-6 gap-2">
                 {STEP_NAMES.map((stepName, index) => {
                   const stepNumber = index + 1;
                   const isCurrent = stepNumber === currentStep;
@@ -119,21 +82,15 @@ const TrackingResults = ({ data }: TrackingResultsProps) => {
 
                   return (
                     <div key={index} className="flex flex-col items-center">
-                      {/* Círculo con icono */}
                       <div
                         className={`
-                          relative z-10 rounded-full p-4 md:p-6 transition-all duration-300
+                          relative z-10 rounded-full p-3 md:p-4 transition-all duration-300 mx-auto
                           ${isActive ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-500'}
-                          ${isCurrent ? 'ring-4 ring-green-200 scale-110' : ''}
+                          ${isCurrent ? 'ring-4 ring-green-200 scale-110 shadow-lg' : ''}
                         `}
                       >
                         {stepIcons[index]}
                       </div>
-
-                      {/* Línea vertical móvil */}
-                      {index < 3 && (
-                        <div className="md:hidden w-0.5 h-8 my-2 bg-gray-200" />
-                      )}
 
                       {/* Texto del paso */}
                       <p
@@ -151,67 +108,6 @@ const TrackingResults = ({ data }: TrackingResultsProps) => {
             </div>
           </div>
 
-          {/* Botón Ver Historia */}
-          <div className="p-6 md:p-8 border-t border-gray-200">
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-pallets-yellow hover:bg-pallets-black hover:text-white text-pallets-black font-bold rounded-xl transition-all duration-200 shadow-md"
-            >
-              {showHistory ? (
-                <>
-                  <ChevronUp className="w-5 h-5" />
-                  Ocultar Historia
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-5 h-5" />
-                  Ver Historia
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Timeline de Historia (colapsable) */}
-          {showHistory && (
-            <div className="p-6 md:p-8 bg-gray-50 border-t border-gray-200">
-              <h3 className="text-xl font-bold text-pallets-black mb-6">Historial de Rastreo</h3>
-
-              <div className="space-y-4">
-                {data.history.map((event, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-lg p-4 shadow-sm border-l-4 border-pallets-yellow"
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Icono de reloj */}
-                      <div className="flex-shrink-0 w-10 h-10 bg-pallets-yellow rounded-full flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-white" />
-                      </div>
-
-                      {/* Contenido */}
-                      <div className="flex-1">
-                        <p className="font-bold text-pallets-black">{event.status}</p>
-
-                        {event.location && (
-                          <p className="text-sm text-pallets-gray mt-1">
-                            📍 {event.location}
-                          </p>
-                        )}
-
-                        {event.note && (
-                          <p className="text-sm text-pallets-gray mt-1">{event.note}</p>
-                        )}
-
-                        <p className="text-xs text-gray-400 mt-2">
-                          {formatDateTime(event.date)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Botón para nueva búsqueda */}
