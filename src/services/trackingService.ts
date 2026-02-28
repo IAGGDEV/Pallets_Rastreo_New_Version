@@ -48,6 +48,10 @@ export const searchTracking = async (
     const targetUrl = `${webhookUrl}?trackingNumber=${encodeURIComponent(trackingNumber.trim().toUpperCase())}`;
     const response = await fetch(targetUrl, {
       method: 'GET',
+      redirect: 'follow', // IMPORTANTE para Google Apps Script
+      headers: {
+        'Accept': 'application/json',
+      }
     });
 
     if (!response.ok) {

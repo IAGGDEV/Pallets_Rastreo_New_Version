@@ -98,7 +98,7 @@ function doGet(e) {
         result.error = error.toString();
     }
 
-    // Retornar JSON para el Frontend
+    // Retornar JSON para el Frontend resolviendo problemas de tipo/CORS
     return ContentService.createTextOutput(JSON.stringify(result))
         .setMimeType(ContentService.MimeType.JSON);
 }
