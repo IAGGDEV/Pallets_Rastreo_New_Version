@@ -1,0 +1,6 @@
+new_repo	https://github.com/IAGGDEV/Pallets_Rastreo_New_Version.git (fetch)
+new_repo	https://github.com/IAGGDEV/Pallets_Rastreo_New_Version.git (push)
+origin	https://github.com/IAGGDEV/Pallets_Rastreo.git (fetch)
+origin	https://github.com/IAGGDEV/Pallets_Rastreo.git (push)
+vercel_repo	https://github.com/PALLETSPREMIUM/restreo.git (fetch)
+vercel_repo	https://github.com/PALLETSPREMIUM/restreo.git (push)
