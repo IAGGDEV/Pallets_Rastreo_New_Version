@@ -20,8 +20,8 @@ export const searchTracking = async (
     if (!webhookUrl) {
       return {
         success: false,
-        error: 'Backend no configurado',
-        message: 'No está configurada la variable VITE_API_URL ni el fallback.',
+        error: 'Servicio temporalmente no disponible',
+        message: 'Estamos experimentando problemas técnicos. Por favor, intenta rastrear tu paquete más tarde.',
       };
     }
 
@@ -46,8 +46,8 @@ export const searchTracking = async (
     if (!data.success) {
       return {
         success: false,
-        error: data.error || 'No se encontró el número de rastreo',
-        message: data.message || 'Verifica que el número esté correcto y exista en la Base de Datos.',
+        error: 'No se encontró el número de rastreo',
+        message: 'Verifica que el número esté escrito correctamente e intenta de nuevo. Si fue enviado recientemente, la información puede tardar hasta 24 horas en aparecer.',
       };
     }
 
@@ -57,8 +57,8 @@ export const searchTracking = async (
 
     return {
       success: false,
-      error: 'Error de conexión',
-      message: 'No se pudo conectar a la base de datos (Problema de CORS o Webhook caído). Revisa la configuración del Apps Script.',
+      error: 'Problema de conexión',
+      message: 'Tuvimos un problema al comunicarnos con el sistema de rastreo. Por favor, verifica tu conexión a internet e intenta nuevamente.',
     };
   }
 };
