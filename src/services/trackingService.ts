@@ -15,13 +15,13 @@ export const searchTracking = async (
 ): Promise<TrackingResponse> => {
   try {
     // URL del Web App de Google Apps Script o n8n Webhook
-    const webhookUrl = (import.meta as any).env.VITE_API_URL || (import.meta as any).env.VITE_N8N_WEBHOOK_URL;
+    const webhookUrl = (import.meta as any).env.VITE_API_URL || (import.meta as any).env.VITE_N8N_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbzBWO0rYb1pqvHwEDdV8yhLkvtjJnmbMjNGWfNuxSHsvynjtdCosHtIKrjP4GVMd65KRA/exec';
 
     if (!webhookUrl) {
       return {
         success: false,
         error: 'Backend no configurado',
-        message: 'No está configurada la variable VITE_API_URL. Por favor revisa la configuración en Netlify.',
+        message: 'No está configurada la variable VITE_API_URL ni el fallback.',
       };
     }
 
